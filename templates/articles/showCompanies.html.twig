@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test{% endblock %}
+
+{% block body %}
+
+ <table id="companies" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Paslauga</th>
+            <th>Specialistas</th>
+            <th>Miestas</th>
+            <th>Adresas</th>
+            <th>Telefono numeris</th>
+            <th>Paslaugos pradzia</th>
+            <th>Paslaugos pabaiga</th>
+            <th>Paslaugos trukmė</th>
+            
+        </tr>
+    </thead>
+        <tbody>
+            <tr>      
+                <td>{{ companies.Pavadinimas }}</td>
+                <td>{{ companies.Paslauga }}</td>
+                <td>{{ companies.Specialistas }}</td>
+                <td>{{ companies.Miestas }}</td>
+                <td>{{ companies.Adresas }}</td>
+                <td>{{ companies.Telefononumeris }}</td>
+                <td>{{ companies.Darbopradzia|date('H:i') }}</td>
+                <td>{{ companies.Darbopabaiga|date('H:i') }}</td>
+                <td>{{ companies.Paslaugostrukme|date('H:i') }}</td>
+                <tr></tr>
+            </tr>
+        </tbody>
+</table>
+
+    <table id="companies" class="table table-striped">
+ <thead>
+        <tr>
+            <th>Specialistas</th>
+            <th>Miestas</th>
+            <th>Adresas</th>
+            <th>Telefono numeris</th>
+            <th>Paslaugos laikas</th>
+            
+        </tr>
+      </thead>
+      <tbody>
+  <tr>      
+            {%  set duration =  companies.Paslaugostrukme|date('H:i')  %}
+            {%  set durationToSeconds = duration|date('H') * 3600 + duration|date('i') * 60 %}
+            {%  set dateFrom = companies.Darbopradzia|date('H:i')  %}
+            {%  set dateFromToSeconds = dateFrom|date('H') * 3600 + dateFrom|date('i') * 60  %}
+            {%  set dateUntil = companies.Darbopabaiga|date('H:i')  %}
+            {%  set dateUntilToSeconds = dateUntil|date('H') * 3600 + dateUntil|date('i') * 60 %}
+            {% for i in range(dateFromToSeconds, dateUntilToSeconds, durationToSeconds) %}
+                {% if ((i + durationToSeconds) <= dateUntilToSeconds) %}
+                    {%  set timeInvervalFrom = i|date("H:i", "+00:00 GMT")   %}
+                    {%  set timeInvervalUntil = (i + durationToSeconds)|date("H:i", "+00:00 GMT")   %}
+                    <td>{{ companies.Specialistas }}</td>
+                    <td>{{ companies.Miestas }}</td>
+                    <td>{{ companies.Adresas }}</td>
+                    <td>{{ companies.Telefononumeris }}</td>
+                    <td>{{timeInvervalFrom}} - {{timeInvervalUntil}}</td>
+                     {%  set exist = false  %}
+                     {%  set notexist = false  %}
+                    {% for register in registrations if exist == false %}
+                     {% if companies.id == register.compid and register.reztime == timeInvervalFrom  %}
+                        {%  set exist = true  %}
+                        {% else  %}
+                            {%  set notexist = true  %}
+                     {% endif %}
+                    {% endfor %}
+                         {% if exist == true  %}
+                         <td>
+                            <a class="btn btn-danger">Rezervuoti</a>
+                         </td>
+                               {% elseif notexist == true  %} 
+                                <td>
+                                    <a href="/companies/rezervation/{{ companies.id }}/{{timeInvervalFrom}}" class="btn btn-dark">Rezervuoti</a>
+                                </td>
+                         
+                     {% endif %}
+                    
+                    <tr></tr>
+                {% endif %}
+            {% endfor %}
+    </tr>
+    </tbody>
+    </table>
+
+
+
+<a href="/">Atgal</a>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="/js/main.js"></script>
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="main.css">
+ 
+{% endblock %}

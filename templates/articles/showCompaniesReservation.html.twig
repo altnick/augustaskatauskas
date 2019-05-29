@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test{% endblock %}
+
+{% block body %}
+    <table id="companies" class="table table-striped">
+ <thead>
+        <tr>
+            
+            <th>Specialistas</th>
+            <th>Miestas</th>
+            <th>Adresas</th>
+            <th>Telefono numeris</th>
+            <th>Paslaugos laikas</th>
+            
+        </tr>
+      </thead>
+      <tbody>
+  <tr>      
+            
+            <td>{{ companies.Specialistas }}</td>
+            <td>{{ companies.Miestas }}</td>
+            <td>{{ companies.Adresas }}</td>
+            <td>{{ companies.Telefononumeris }}</td>
+            <td>{{ app.request.get('timeInvervalFrom') }}</td>
+            <td>
+              <a href="/companies/rezervation/{{ companies.id }}/{{app.request.get('timeInvervalFrom') }}/registrate" class="btn btn-dark">Rezervuoti</a>
+            </td><tr></tr>
+         
+    </tr>
+
+
+    </tbody>
+    </table>
+
+
+
+<a href="/companies/{{ companies.id }}">Atgal</a>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script src="/js/main.js"></script>
+{% endblock %}

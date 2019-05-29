@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Companies{% endblock %}
+
+{% block body %}
+  {% if companies %}
+    <table id="companies" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Pavadinimas</th> 
+          <th>Paslaugos</th>
+           <th>Miestas</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for company in companies %}
+          <tr>
+            <td>{{ company.pavadinimas }}</td>
+            <td>{{ company.paslauga }}</td>
+            <td>{{ company.miestas }}</td>
+            <td>
+              <a href="/companies/{{ company.id }}" class="btn btn-dark">Rodyti</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+  <script src="/js/main.js"></script>
+{% endblock %}
